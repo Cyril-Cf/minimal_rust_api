@@ -25,7 +25,11 @@ async fn main() -> std::io::Result<()> {
                     .service(controllers::user_controller::find_one_user)
                     .service(controllers::user_controller::find_all_users)
                     .service(controllers::user_controller::update_user)
-                    .service(controllers::user_controller::delete_user),
+                    .service(controllers::user_controller::delete_user)
+                    .service(controllers::permission_controller::add_permission)
+                    .service(controllers::permission_controller::find_all_permissions)
+                    .service(controllers::permission_controller::find_one_permission)
+                    .service(controllers::permission_controller::delete_permission),
             )
             .app_data(web::Data::new(state.clone()))
     })
