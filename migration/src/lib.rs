@@ -2,6 +2,7 @@ pub use sea_orm_migration::*;
 
 mod permission_migration;
 mod user_migration;
+mod user_permission_migration;
 
 pub struct Migrator;
 
@@ -11,6 +12,7 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(user_migration::Migration),
             Box::new(permission_migration::Migration),
+            Box::new(user_permission_migration::Migration),
         ]
     }
 }

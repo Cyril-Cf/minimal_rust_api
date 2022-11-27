@@ -20,15 +20,6 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(ColumnDef::new(Column::Name).string().not_null())
-                    .col(ColumnDef::new(Column::UserId).integer().not_null())
-                    .foreign_key(
-                        ForeignKey::create()
-                            .name("users_permissions")
-                            .from(Entity, Column::UserId)
-                            .to(entity::user::Entity, entity::user::Column::Id)
-                            .on_delete(ForeignKeyAction::Cascade)
-                            .on_update(ForeignKeyAction::Cascade),
-                    )
                     .to_owned(),
             )
             .await

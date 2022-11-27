@@ -11,13 +11,17 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::permission::Entity")]
+    #[sea_orm(has_many = "super::user_permission::Entity")]
     Permissions,
 }
 
 impl Related<super::permission::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Permissions.def()
+        super::user_permission::Relation::User.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::user_permission::Relation::Permission.def().rev())
     }
 }
 

@@ -22,19 +22,10 @@ async fn delete_permission(
     }
 }
 
-#[post("/permissions/{new_name}/{user_id}")]
-async fn add_permission(
-    app_state: web::Data<AppState>,
-    path: web::Path<(String, String)>,
-) -> impl Responder {
-    let (new_name, user_id) = path.into_inner();
-    match permission_service::create(
-        new_name.to_string(),
-        user_id.parse::<i32>().unwrap(),
-        &app_state.conn,
-    )
-    .await
-    {
+#[post("/permissions/{new_name}")]
+async fn add_permission(app_state: web::Data<AppState>, path: web::Path<String>) -> impl Responder {
+    let new_name = path.into_inner();
+    match permission_service::create(new_name.to_string(), &app_state.conn).await {
         Ok(permission) => HttpResponse::Ok().json(permission),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }

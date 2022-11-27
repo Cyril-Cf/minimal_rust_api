@@ -12,14 +12,9 @@ pub async fn find_all(conn: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
     Entity::find().all(conn).await
 }
 
-pub async fn create(
-    new_name: String,
-    user_id: i32,
-    conn: &DatabaseConnection,
-) -> Result<Model, DbErr> {
+pub async fn create(new_name: String, conn: &DatabaseConnection) -> Result<Model, DbErr> {
     entity::permission::ActiveModel {
         name: ActiveValue::Set(new_name),
-        user_id: ActiveValue::Set(user_id),
         ..Default::default()
     }
     .insert(conn)
