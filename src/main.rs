@@ -31,7 +31,8 @@ async fn main() -> std::io::Result<()> {
                     .service(controllers::permission_controller::find_one_permission)
                     .service(controllers::permission_controller::delete_permission)
                     .service(controllers::user_permission_controller::add_permission_to_user)
-                    .service(controllers::user_permission_controller::get_permissions_for_user),
+                    .service(controllers::user_permission_controller::get_permissions_for_user)
+                    .service(controllers::user_permission_controller::remove_permissions_for_user),
             )
             .app_data(web::Data::new(state.clone()))
     })
