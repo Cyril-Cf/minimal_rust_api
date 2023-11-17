@@ -2,6 +2,9 @@
 name = "test_actix"
 version = "0.1.0"
 edition = "2021"
+authors = ["Cyril Couffe <no-reply@rust-lang.org>"]
+rust-version = "1.71.1"
+description = "A minimal function API with Actix web, sea-orm, and sqlite"
 
 [workspace]
 members = [".", "entity", "migration"]
