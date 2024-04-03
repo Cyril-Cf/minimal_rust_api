@@ -4,3 +4,24 @@ services:
     build: .
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
+    restart: on-failure
+    networks:
+      - app
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=database
+    networks:
+      - app
+volumes:
+  db:
+networks:
+  app:

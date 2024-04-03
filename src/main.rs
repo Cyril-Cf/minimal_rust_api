@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpServer};
+use dotenv::dotenv;
 use migration::{Migrator, MigratorTrait};
 use sea_orm::{Database, DatabaseConnection};
 
@@ -12,7 +13,8 @@ struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db_url = "sqlite::memory:";
+    dotenv().ok();
+    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set.");
     let conn = Database::connect(db_url).await.unwrap();
     Migrator::up(&conn, None).await.unwrap();
     println!("Backend launched!");
