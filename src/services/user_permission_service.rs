@@ -1,3 +1,5 @@
+use entity::permission::Entity as PermissionEntity;
+use entity::permission::Model as PermissionModel;
 use entity::user_permission::{Entity, Model};
 use sea_orm::{
     entity::ActiveValue, ActiveModelTrait, ColumnTrait, Condition, DatabaseConnection, DbErr,
@@ -41,9 +43,20 @@ pub async fn delete(
 pub async fn find_all_for_user(
     id_user: i32,
     conn: &DatabaseConnection,
-) -> Result<Vec<Model>, DbErr> {
-    Entity::find()
+) -> Result<Vec<PermissionModel>, DbErr> {
+    let entities = Entity::find()
         .filter(entity::user_permission::Column::UserId.eq(id_user))
         .all(conn)
-        .await
+        .await?;
+    let mut permissions: Vec<PermissionModel> = Vec::new();
+    for entity in entities {
+        let permission_entity = PermissionEntity::find()
+            .filter(entity::permission::Column::Id.eq(entity.permission_id))
+            .one(conn)
+            .await?;
+        if let Some(permission) = permission_entity {
+            permissions.push(permission);
+        }
+    }
+    Ok(permissions)
 }
