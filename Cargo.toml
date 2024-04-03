@@ -10,8 +10,8 @@ description = "A minimal function API with Actix web, sea-orm, and sqlite"
 members = [".", "entity", "migration"]
 
 [dependencies]
-entity = { path = "entity" }
-migration = { path = "migration" }
+entity = { path = "./entity" }
+migration = { path = "./migration" }
 actix-web = "4.4.0"
 async-std = { version = "1.12.0", features = ["attributes", "tokio1"] }
 serde = { version = "1.0.192", features = ["derive"] }

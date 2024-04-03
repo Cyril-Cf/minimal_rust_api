@@ -15,6 +15,7 @@ async fn main() -> std::io::Result<()> {
     let db_url = "sqlite::memory:";
     let conn = Database::connect(db_url).await.unwrap();
     Migrator::up(&conn, None).await.unwrap();
+    println!("Backend launched!");
     let state = AppState { conn };
 
     HttpServer::new(move || {
@@ -36,7 +37,7 @@ async fn main() -> std::io::Result<()> {
             )
             .app_data(web::Data::new(state.clone()))
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0", 8080))?
     .run()
     .await
 }
