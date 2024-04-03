@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 use dotenv::dotenv;
 use migration::{Migrator, MigratorTrait};
@@ -21,7 +22,13 @@ async fn main() -> std::io::Result<()> {
     let state = AppState { conn };
 
     HttpServer::new(move || {
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allow_any_method()
+            .allow_any_header()
+            .max_age(3600);
         App::new()
+            .wrap(cors)
             .service(
                 web::scope("api")
                     .service(controllers::user_controller::add_user)
