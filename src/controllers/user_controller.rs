@@ -10,7 +10,9 @@ async fn delete_user(app_state: web::Data<AppState>, user_id: web::Path<String>)
                 Some(result) => {
                     HttpResponse::Ok().body(format!("{} row deleted", result.rows_affected))
                 }
-                None => HttpResponse::Ok().body("No user deleted"),
+                None => HttpResponse::InternalServerError().body(
+                    "No user deleted, it's related to a permission. Remove the association first!",
+                ),
             },
             Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
         },

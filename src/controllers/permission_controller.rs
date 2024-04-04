@@ -14,7 +14,9 @@ async fn delete_permission(
                 Some(result) => {
                     HttpResponse::Ok().body(format!("{} row deleted", result.rows_affected))
                 }
-                None => HttpResponse::Ok().body("No permission deleted"),
+                None => HttpResponse::InternalServerError().body(
+                    "No permission deleted, it's related to a user. Remove the association first!",
+                ),
             },
             Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
         },

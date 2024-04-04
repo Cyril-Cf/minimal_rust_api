@@ -40,6 +40,16 @@ pub async fn delete(
     ))
 }
 
+pub async fn find_all_for_permission(
+    id_permission: i32,
+    conn: &DatabaseConnection,
+) -> Result<Vec<Model>, DbErr> {
+    Entity::find()
+        .filter(entity::user_permission::Column::PermissionId.eq(id_permission))
+        .all(conn)
+        .await
+}
+
 pub async fn find_all_for_user(
     id_user: i32,
     conn: &DatabaseConnection,

@@ -4,6 +4,8 @@ use sea_orm::{
     IntoActiveModel, ModelTrait,
 };
 
+use super::user_permission_service;
+
 pub async fn find_one(id: i32, conn: &DatabaseConnection) -> Result<Option<Model>, DbErr> {
     Entity::find_by_id(id).one(conn).await
 }
@@ -42,7 +44,16 @@ pub async fn update(
 
 pub async fn delete(id: i32, conn: &DatabaseConnection) -> Result<Option<DeleteResult>, DbErr> {
     match Entity::find_by_id(id).one(conn).await? {
-        Some(entity) => Ok(Some(entity.delete(conn).await?)),
+        Some(entity) => {
+            if user_permission_service::find_all_for_user(entity.id, conn)
+                .await?
+                .len()
+                > 0
+            {
+                return Ok(None);
+            }
+            return Ok(Some(entity.delete(conn).await?));
+        }
         None => Ok(None),
     }
 }
