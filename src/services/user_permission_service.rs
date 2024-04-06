@@ -11,6 +11,14 @@ pub async fn create(
     user_id: i32,
     conn: &DatabaseConnection,
 ) -> Result<Model, DbErr> {
+    let entities = Entity::find()
+        .filter(entity::user_permission::Column::UserId.eq(user_id))
+        .filter(entity::user_permission::Column::PermissionId.eq(permission_id))
+        .all(conn)
+        .await?;
+    if !entities.is_empty() {
+        return Err(DbErr::Custom("Association already exists!".to_string()));
+    }
     entity::user_permission::ActiveModel {
         permission_id: ActiveValue::Set(permission_id),
         user_id: ActiveValue::Set(user_id),

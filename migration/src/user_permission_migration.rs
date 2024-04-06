@@ -13,18 +13,13 @@ impl MigrationTrait for Migration {
                     .table(Entity)
                     .if_not_exists()
                     .col(ColumnDef::new(Column::PermissionId).integer().not_null())
-                    .foreign_key(
-                        ForeignKey::create()
-                            .name("user_permissions_permissions")
-                            .from(Entity, Column::PermissionId)
-                            .to(entity::permission::Entity, entity::permission::Column::Id),
-                    )
                     .col(ColumnDef::new(Column::UserId).integer().not_null())
-                    .foreign_key(
-                        ForeignKey::create()
-                            .name("user_permissions_users")
-                            .from(Entity, Column::UserId)
-                            .to(entity::user::Entity, entity::user::Column::Id),
+                    .primary_key(
+                        Index::create()
+                            .name("pk-user_permissions")
+                            .col(Column::PermissionId)
+                            .col(Column::UserId)
+                            .primary(),
                     )
                     .to_owned(),
             )
